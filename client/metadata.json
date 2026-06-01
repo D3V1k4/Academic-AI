@@ -1,0 +1,6 @@
+{
+  "name": "Academic AI",
+  "description": "Your Personalized AI Academic Mentor",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
