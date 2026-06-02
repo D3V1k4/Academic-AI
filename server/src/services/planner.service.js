@@ -20,10 +20,8 @@ const getOrCreateDailyPlan = async (userId, dateStr) => {
     const prioritizedTopics = await priorityService.getPrioritizedTopics(userId);
     
     // Pick top 3 pending prioritized topics
-    const pendingTopics = prioritizedTopics
-      .filter((t) => t.status === "pending")
-      .slice(0, 3);
-
+    const pendingTopics = prioritizedTopics.slice(0, 3);
+    
     const tasks = pendingTopics.map((topic, index) => {
       // High priority topics get 60 mins, others get 45 mins
       const duration = topic.priority === "high" ? 60 : 45;

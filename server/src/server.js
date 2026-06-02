@@ -11,8 +11,10 @@ const { startAnalyticsAggregatorJob } = require("./jobs/analytics-aggregator.job
 const { startNotificationSenderJob } = require("./jobs/notification-sender.job");
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI =
+let MONGO_URI =
   process.env.MONGO_URI || "mongodb://localhost:27017/academic_ai";
+
+let _memoryServerInstance = null;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +62,17 @@ const startJobs = () => {
 |--------------------------------------------------------------------------
 */
 const bootServer = async () => {
+  // Optionally start an in-memory MongoDB for local testing
+  if (process.env.USE_INMEMORY_DB === "true") {
+    try {
+      const { MongoMemoryServer } = require("mongodb-memory-server");
+      _memoryServerInstance = await MongoMemoryServer.create();
+      MONGO_URI = _memoryServerInstance.getUri();
+      logger.info("Using in-memory MongoDB for testing");
+    } catch (err) {
+      logger.error("Failed to start in-memory MongoDB:", err);
+    }
+  }
   const dbConnected = await connectDB();
 
   // STOP SERVER IF DB FAILS

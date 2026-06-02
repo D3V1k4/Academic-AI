@@ -1,88 +1,48 @@
-const generateDailyPlan = (data) => {
-  const {
-    availableHours,
-    topics
-  } = data;
+const generateDailyPlan = (data = {}) => {
+  const availableHours = Number(data.availableHours ?? data.hoursAvailable ?? 0);
+  const topics = Array.isArray(data.topics) ? data.topics : [];
 
-  /*
-  |--------------------------------------------------------------------------
-  | Sort Topics By Priority
-  |--------------------------------------------------------------------------
-  */
-  const sortedTopics = topics.sort(
-    (a, b) => b.priority - a.priority
+  const sortedTopics = [...topics].sort(
+    (a, b) => (b.priority || 0) - (a.priority || 0)
   );
 
-  /*
-  |--------------------------------------------------------------------------
-  | Plan Generation
-  |--------------------------------------------------------------------------
-  */
   let remainingHours = availableHours;
-
   const plan = [];
 
   for (const topic of sortedTopics) {
-    if (remainingHours <= 0) {
-      break;
-    }
+    if (remainingHours <= 0) break;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Adaptive Duration Logic
-    |--------------------------------------------------------------------------
-    */
     let sessionDuration = 1;
 
-    if (topic.priority >= 8) {
+    if ((topic.priority || 0) >= 8) {
       sessionDuration = 2;
-    } else if (topic.priority >= 5) {
+    } else if ((topic.priority || 0) >= 5) {
       sessionDuration = 1.5;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Prevent Over Allocation
-    |--------------------------------------------------------------------------
-    */
     if (sessionDuration > remainingHours) {
       sessionDuration = remainingHours;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Study Type Logic
-    |--------------------------------------------------------------------------
-    */
     const studyType =
-      topic.weakness >= 7
+      (topic.weakness || 0) >= 7
         ? "Concept Learning + Practice"
         : "Revision + PYQs";
 
-    /*
-    |--------------------------------------------------------------------------
-    | Add Study Session
-    |--------------------------------------------------------------------------
-    */
     plan.push({
-      topic: topic.topic,
+      topic: topic.topic || topic.name || "Untitled Topic",
       duration: `${sessionDuration} hour(s)`,
       studyType,
-      priority: topic.priority,
+      priority: topic.priority || 0,
       breakAfter: "15 mins"
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | Auto Revision Block
-    |--------------------------------------------------------------------------
-    */
-    if (topic.priority >= 8) {
+    if ((topic.priority || 0) >= 8) {
       plan.push({
-        topic: `${topic.topic} Revision`,
+        topic: `${topic.topic || topic.name || "Untitled Topic"} Revision`,
         duration: "30 mins",
         studyType: "Quick Revision",
-        priority: topic.priority,
+        priority: topic.priority || 0,
         breakAfter: "10 mins"
       });
     }
@@ -90,11 +50,6 @@ const generateDailyPlan = (data) => {
     remainingHours -= sessionDuration;
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Burnout Prevention
-  |--------------------------------------------------------------------------
-  */
   if (availableHours >= 6) {
     plan.push({
       topic: "Relaxation / Recovery",

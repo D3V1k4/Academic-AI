@@ -11,7 +11,7 @@ const router = express.Router();
 | Protected AI Routes
 |--------------------------------------------------------------------------
 */
-// router.use(authMiddleware);
+ router.use(authMiddleware);
 
 /*
 |--------------------------------------------------------------------------
