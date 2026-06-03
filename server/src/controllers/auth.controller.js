@@ -39,6 +39,17 @@ const getMe = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Logout successful"
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const completeOnboarding = async (req, res, next) => {
   try {
     const { targetGpa, weeklyStudyTargetHours } = req.body;
@@ -61,5 +72,6 @@ module.exports = {
   signup,
   login,
   getMe,
+  logout,
   completeOnboarding
 };

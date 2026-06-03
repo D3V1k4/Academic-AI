@@ -7,7 +7,9 @@ const { signupSchema, loginSchema, onboardingSchema } = require("../validators/a
 const router = express.Router();
 
 router.post("/signup", validate(signupSchema), authController.signup);
+router.post("/register", validate(signupSchema), authController.signup);
 router.post("/login", validate(loginSchema), authController.login);
+router.post("/logout", authController.logout);
 router.get("/me", authMiddleware, authController.getMe);
 router.post(
   "/onboarding",
