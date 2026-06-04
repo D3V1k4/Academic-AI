@@ -8,6 +8,7 @@ const resourceRoutes = require("./resource.routes");
 const pyqRoutes = require("./pyq.routes");
 const aiRoutes = require("./ai.routes");
 const notificationRoutes = require("./notification.routes");
+const dashboardRoutes = require("./dashboard.routes");
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use("/resources", resourceRoutes);
 router.use("/pyq", pyqRoutes);
 router.use("/ai", aiRoutes);
 router.use("/notifications", notificationRoutes);
+router.use("/dashboard", dashboardRoutes);
 
 module.exports = router;

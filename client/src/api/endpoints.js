@@ -5,7 +5,7 @@
     LOGOUT: "/auth/logout",
   },
   USER: {
-    PROFILE: "/user/profile",
+    PROFILE: "/users/profile",
   },
   PLANNER: {
     DAILY: (date) => `/planner/daily?date=${date}`,
@@ -23,6 +23,9 @@
     TRENDS: "/analytics/trends",
     WEAK_TOPICS: "/analytics/weak-topics",
   },
+  DASHBOARD: {
+  OVERVIEW: "/dashboard/overview",
+},
   RESOURCES: {
     LIST: (params = "") => `/resources${params}`,
     WATCHED: "/resources/watched",
